@@ -21,41 +21,28 @@ endfunction
 function! s:open_window(position)
   " open scratch buffer window and move to it. this will create the buffer if
   " necessary.
-  let scr_bufnr = bufnr('todo.txt')
-  if scr_bufnr == -1
-    let cmd = g:scratch_horizontal ? 'new' : 'vnew'
-    execute a:position . s:resolve_size(g:scratch_height) . cmd . ' todo.txt'
-    execute 'setlocal filetype=' . g:scratch_filetype
-    setlocal bufhidden=hide
-    setlocal nobuflisted
-    setlocal buftype=nofile
-    setlocal foldcolumn=0
-    setlocal nofoldenable
-    setlocal nonumber
-    setlocal noswapfile
-    setlocal winfixheight
-    setlocal winfixwidth
-    if strlen(g:scratch_persistence_file) > 0
-      if filereadable(fnamemodify(g:scratch_persistence_file, ':p'))
-        let cpo = &cpo
-        set cpo-=a
-        execute ':r ' . g:scratch_persistence_file
-        let &cpo = cpo
-        execute 'normal! ggdd'
-      endif
-    endif
-    call s:activate_autocmds(bufnr('%'))
-  else
-    let scr_winnr = bufwinnr(scr_bufnr)
-    if scr_winnr != -1
-      if winnr() != scr_winnr
-        execute scr_winnr . 'wincmd w'
-      endif
-    else
-      let cmd = g:scratch_horizontal ? 'split' : 'vsplit'
-      execute a:position . s:resolve_size(g:scratch_height) . cmd . ' +buffer' . scr_bufnr
+  let cmd = g:scratch_horizontal ? 'new' : 'vnew'
+  execute a:position . s:resolve_size(g:scratch_height) . cmd . ' todo.txt'
+  execute 'setlocal filetype=' . g:scratch_filetype
+  setlocal bufhidden=hide
+  setlocal nobuflisted
+  setlocal buftype=nofile
+  setlocal foldcolumn=0
+  setlocal nofoldenable
+  setlocal nonumber
+  setlocal noswapfile
+  setlocal winfixheight
+  setlocal winfixwidth
+  if strlen(g:scratch_persistence_file) > 0
+    if filereadable(fnamemodify(g:scratch_persistence_file, ':p'))
+      let cpo = &cpo
+      set cpo-=a
+      execute ':r ' . g:scratch_persistence_file
+      let &cpo = cpo
+      execute 'normal! ggdd'
     endif
   endif
+  call s:activate_autocmds(bufnr('%'))
 endfunction
 
 function! s:close_window(force)
